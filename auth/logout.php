@@ -5,6 +5,6 @@ require_once("../config/db.php");
    effectively logging the user out, then redirect to home. */
 $_SESSION = [];
 session_destroy();
-header("Location: /901_VotingProj/index.html");
+header("Location: /901_VotingProj/index.php");
 exit();
 ?>

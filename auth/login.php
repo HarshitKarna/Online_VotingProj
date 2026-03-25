@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         /* password_verify() safely compares plaintext against the stored hash */
         if (password_verify($password, $hashed)) {
             $_SESSION["email"] = $email; /* Store email in session to mark user as logged in */
-            header("Location: /901_VotingProj/index.html");
+            header("Location: /901_VotingProj/index.php");
             exit();
         } else {
             $error = "Invalid password.";
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="auth-footer">
             <a href="register.php">Don't have an account? Register</a>
-            <a href="/901_VotingProj/index.html">&larr; Back to Home</a>
+            <a href="/901_VotingProj/index.php">&larr; Back to Home</a>
         </div>
     </div>
 </div>

@@ -13,6 +13,6 @@ $res = $stmt->get_result(); $stmt->close();
 if ($res->num_rows > 0) {
     header("Location: view_poll.php?code=" . urlencode($code)); exit();
 } else {
-    echo "<div style='text-align:center;margin-top:50px;'><h3>Poll Not Found</h3><a href='/901_VotingProj/index.html'>Back to Home</a></div>";
+    echo "<div style='text-align:center;margin-top:50px;'><h3>Poll Not Found</h3><a href='/901_VotingProj/index.php'>Back to Home</a></div>";
 }
 ?>
