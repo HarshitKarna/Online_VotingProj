@@ -9,13 +9,13 @@ Known issues:
 -due to the large size of the CSS file, browser chooses to not reload it everytime you visit the website. So, after making changes to CSS, the result doesnt appear, or in worse cases, CSS disappears completely. This is a browser issue more than issue with this code, but i didnt choose to research further to see if i could tackle it using my code. Anyways, simple fix is CTRL+F5. it force reloads the CSS.
 
 -for emojis, website uses HTML entities/unicodes.
- <pre>&#128499;</pre> → 🗳️ (ballot box)
- <pre>&#9670;</pre> → ◈ (the navbar logo diamond)
- <pre>&#127942;</pre> → 🏆 (gold trophy)
- <pre>&#9889;</pre> → ⚡ (lightning bolt)
- <pre>&#128273;</pre> → 🔑 (key)
- <pre>&#10003;</pre> → ✓ (checkmark)
- <pre>&#9940;</pre> → 🚫 (disqualified)
+ `&#128499;` → 🗳️ (ballot box)
+ `&#9670;` → ◈ (the navbar logo diamond)
+ `&#127942;` → 🏆 (gold trophy)
+ `&#9889;` → ⚡ (lightning bolt)
+ `&#128273;` → 🔑 (key)
+ `&#10003;` → ✓ (checkmark)
+ `&#9940;` → 🚫 (disqualified)
  ...etc
  Browser's unicode rendering renders these emojis. But, if older browsers are used, the emojis and sometimes dissappear leaving a rectangular box instead.
 
