@@ -15,7 +15,7 @@ function renderNav() {
     $nav  = '<nav class="navbar" id="mainNav">';
     $nav .= '<div class="nav-brand"><a href="/901_VotingProj/index.php" class="nav-logo">';
     $nav .= '<span class="logo-icon">&#9670;</span>';
-    $nav .= '<span class="logo-text">Online Voting</span></a></div>';    
+    $nav .= '<span class="logo-text">VoteNest</span></a></div>';    
 
     /* Desktop nav links — differ based on login state */
     $nav .= '<div class="nav-links">';

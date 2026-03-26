@@ -8,7 +8,7 @@ require_once("includes/navbar.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Online Voting</title>
+    <title>VoteNest</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="landing-page">
@@ -27,7 +27,7 @@ require_once("includes/navbar.php");
 
     <!-- Main headline -->
     <div class="hero-header">
-        <h1 class="hero-title">Online <span class="hero-accent">Voting</span></h1>
+        <h1 class="hero-title">Vote <span class="hero-accent">Nest</span></h1>
         <p class="hero-subtitle">Create polls. Cast votes. See results.</p>
     </div>
 
