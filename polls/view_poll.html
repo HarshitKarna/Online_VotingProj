@@ -12,10 +12,7 @@
 <div class="nav-mobile-menu" id="mobileMenu"></div>
 
 <div class="page-wrap" id="pageWrap">
-  <div id="loadingMsg" class="loading-state">
-  <div class="loading-spinner"></div>
-  <p>Loading poll…</p>
-</div>
+  <p id="loadingMsg" style="text-align:center;margin-top:60px;">Loading poll…</p>
 </div>
 
 <!-- Description modal -->
@@ -54,7 +51,7 @@
   const isEnded = poll.status === "ended" || Date.now() >= endTs;
 
   // Auto-expire if needed
-  if (!isEnded && poll.status === "active" && Date.now() >= endTs) {
+  if (!isEnded === false && poll.status === "active" && Date.now() >= endTs) {
     await updateDoc(doc(db, "polls", code), { status: "ended" });
   }
 
@@ -152,8 +149,18 @@
         lbl.className = "vote-tile";
         lbl.innerHTML = `<input type="radio" name="option_id" value="${opt.id}" hidden required>
           <span class="vote-tile-text">${escHtml(opt.option_text)}</span>
-          ${opt.description?.trim() ? `<button type="button" class="desc-peek-btn"
-            onclick="event.preventDefault();openModal(${JSON.stringify(opt.option_text)},${JSON.stringify(opt.description)})">&#8505;</button>` : ""}`;
+          ${opt.description?.trim() ? `<button type="button" class="desc-peek-btn">&#8505;</button>` : ""}`;
+        // Store title/desc on the button element directly — avoids any HTML/JSON escaping issues
+        if (opt.description?.trim()) {
+          const btn = lbl.querySelector(".desc-peek-btn");
+          btn._modalTitle = opt.option_text;
+          btn._modalDesc  = opt.description;
+          btn.addEventListener("click", e => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal(btn._modalTitle, btn._modalDesc);
+          });
+        }
         grid.appendChild(lbl);
       }
     } else {
