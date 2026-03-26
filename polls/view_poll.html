@@ -12,7 +12,7 @@
 <div class="nav-mobile-menu" id="mobileMenu"></div>
 
 <div class="page-wrap" id="pageWrap">
-  <p id="loadingMsg" style="text-align:center;margin-top:60px;">Loading poll…</p>
+  <div id="loadingMsg" class="loading-state"><div class="loading-spinner"></div><p>Loading poll…</p></div>
 </div>
 
 <!-- Description modal -->
@@ -243,17 +243,22 @@
             <div class="progress"><div class="progress-bar bg-dark" style="width:100%">DQ</div></div>
           </div>`;
         } else {
-          const pct      = totalVotes > 0 ? Math.round((opt.votes/totalVotes)*100) : 0;
-          const barClass = place===0 ? "bg-gold" : place===1 ? "bg-blue" : "bg-teal";
-          const trophy   = isEnded ? (trophies[place] ?? (place+1)+".") : (place+1)+".";
-          const myVote   = userVoteOptionId === opt.id ? " &#10003;" : "";
-          html += `<div class="result-row ${place===0&&isEnded?"result-winner":""}" style="animation-delay:${place*0.08}s">
+          const pct        = totalVotes > 0 ? Math.round((opt.votes/totalVotes)*100) : 0;
+          const isWinner   = place === 0 && isEnded;
+          const isMyVote   = userVoteOptionId === opt.id;
+          const trophy     = isEnded ? (trophies[place] ?? (place+1)+".") : (place+1)+".";
+          const yourPick   = isMyVote ? `<span class="your-pick-label">your pick</span>` : "";
+          const winnerBar  = isWinner ? "winner-bar" : "";
+          html += `<div class="result-row ${isWinner?"result-winner":""}" style="animation-delay:${place*0.08}s">
             <div class="result-label">
               <span class="result-rank">${trophy}</span>
-              <span>${escHtml(opt.option_text)}${myVote}</span>
+              <span>${escHtml(opt.option_text)}${yourPick}</span>
               <span class="result-votes">${opt.votes} vote${opt.votes!==1?"s":""}</span>
             </div>
-            <div class="progress"><div class="progress-bar ${barClass}" style="width:${pct}%">${pct}%</div></div>
+            <div class="result-bar-row">
+              <div class="progress" style="flex:1"><div class="progress-bar ${winnerBar}" style="width:${pct}%"></div></div>
+              <span class="result-pct">${pct}%</span>
+            </div>
           </div>`;
           place++;
         }

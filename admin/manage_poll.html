@@ -12,7 +12,7 @@
 <div class="nav-mobile-menu" id="mobileMenu"></div>
 
 <div class="page-wrap" id="pageWrap">
-  <p style="text-align:center;margin-top:60px;">Loading…</p>
+  <div class="loading-state"><div class="loading-spinner"></div><p>Loading…</p></div>
 </div>
 
 <script src="../assets/script.js"></script>
@@ -134,20 +134,22 @@
   const trophies = ["&#127942;","&#129352;","&#129353;"];
   options.forEach((opt, i) => {
     const pct      = totalVotes > 0 && !opt.is_disqualified ? Math.round((opt.votes/totalVotes)*100) : 0;
-    const barClass = opt.is_disqualified ? "bg-dark" : (i===0?"bg-gold":i===1?"bg-blue":"bg-teal");
+    const isWinner = i === 0 && isEnded && !opt.is_disqualified;
     const trophy   = opt.is_disqualified ? "&#9940;" : (trophies[i] ?? (i+1)+".");
+    const winnerBar = isWinner ? "winner-bar" : "";
     const tile     = document.createElement("div");
-    tile.className = `manage-option-tile ${opt.is_disqualified?"disq-tile":i===0&&isEnded?"winner-tile":""}`;
+    tile.className = `manage-option-tile ${opt.is_disqualified?"disq-tile":isWinner?"winner-tile":""}`;
     tile.innerHTML = `
       <div class="mot-header">
         <span class="mot-rank">${trophy}</span>
         <span class="mot-name">${escHtml(opt.option_text)}</span>
         <span class="mot-votes">${opt.is_disqualified ? "DQ" : opt.votes+" votes"}</span>
       </div>
-      <div class="progress">
-        <div class="progress-bar ${barClass}" style="width:${opt.is_disqualified?100:pct}%">
-          ${opt.is_disqualified ? "Disqualified" : pct+"%"}
+      <div class="result-bar-row">
+        <div class="progress" style="flex:1">
+          <div class="progress-bar ${winnerBar} ${opt.is_disqualified?"bg-dark":""}" style="width:${opt.is_disqualified?100:pct}%"></div>
         </div>
+        <span class="result-pct">${opt.is_disqualified?"DQ":pct+"%"}</span>
       </div>
       ${opt.is_disqualified
         ? `<p class="disq-reason"><em>Reason: ${escHtml(opt.disqualify_reason||"")}</em></p>`

@@ -1,34 +1,58 @@
-/* All colors, spacing, and animations are driven by CSS variables defined in :root, 
-allowing changes in theme/design to be made easily.
-This website is built by taking colors from a popular website theme called "Neomorphic Dark" */
+/* =============================================================================
+   VOTENEST — GLOBAL STYLESHEET
+   Theme: Glassy Neomorphic Dark
+   All colors, spacing, and animations are driven by CSS variables defined in
+   :root, allowing theme-wide changes in one place.
+   ============================================================================= */
 
 @charset "UTF-8";
 
-/* ROOT VARIABLES & RESET, REDUCING REDUNDANCY IN THEME's VARIABLES */
+/* =============================================================================
+   ROOT VARIABLES
+   These are the single source of truth for every color, shadow, radius, and
+   transition speed used across the site. Edit here to retheme everything.
+   ============================================================================= */
 :root {
+    /* Typography */
     --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --font-mono: 'Consolas', 'Courier New', monospace;
 
+    /* Background layers — bg is the darkest page background, surface is for cards */
     --bg:         #0d0d10;
     --bg2:        #13131a;
     --bg3:        #1a1a24;
     --surface:    #1e1e2e;
     --surface2:   #252538;
+
+    /* Borders are a very faint white so they're subtle on the dark bg */
     --border:     rgba(255,255,255,0.08);
+
+    /* Text — main is near-white, muted is a desaturated purple-grey */
     --text:       #e2e2f0;
     --text-muted: #7878a0;
-    --accent:     #6c63ff;
-    --accent2:    #30d158;
-    --gold:       #ffd60a;
-    --blue:       #0a84ff;
-    --danger:     #ff375f;
-    --warning:    #ff9f0a;
+
+    /* Accent colors */
+    --accent:     #6c63ff; /* purple — primary CTA, links, highlights */
+    --accent2:    #30d158; /* green — live/active states, success */
+    --gold:       #ffd60a; /* yellow — winner highlight */
+    --blue:       #0a84ff; /* blue — secondary info color */
+    --danger:     #ff375f; /* red — errors, logout, disqualify */
+    --warning:    #ff9f0a; /* orange — warnings */
+
+    /* Spacing & shape */
     --radius:     14px;
     --radius-sm:  8px;
+
+    /* Reusable deep shadow for elevated cards */
     --shadow:     0 8px 32px rgba(0,0,0,0.5);
+
+    /* Global transition speed — applied to hover states site-wide */
     --t:          0.22s ease;
 }
 
+/* =============================================================================
+   RESET & BASE
+   ============================================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -42,18 +66,24 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* NAVBAR */
+/* =============================================================================
+   NAVBAR
+   Sticky top bar with frosted-glass blur so page content scrolls under it.
+   ============================================================================= */
 .navbar {
     position: sticky; top: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 32px; height: 60px;
+    /* Semi-transparent so the blur feels like real frosted glass */
     background: rgba(13,13,16,0.92);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     transition: box-shadow var(--t);
 }
+/* Extra shadow added via JS when user scrolls down */
 .navbar-scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.6); }
 
+/* Brand logo — icon spins slowly, text uses a purple→green gradient */
 .nav-logo {
     display: flex; align-items: center; gap: 9px;
     font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px;
@@ -79,6 +109,7 @@ a { color: inherit; text-decoration: none; }
 }
 .nav-link:hover { color: var(--text); background: var(--surface); }
 
+/* Login link pulses with a soft purple glow to draw attention */
 .nav-link-glow {
     color: var(--accent); border: 1px solid rgba(108,99,255,0.35);
     animation: glow-pulse 3s ease-in-out infinite;
@@ -87,11 +118,14 @@ a { color: inherit; text-decoration: none; }
     0%,100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
     50%      { box-shadow: 0 0 10px 2px rgba(108,99,255,0.4); }
 }
+
+/* Register link is solid green — most prominent nav action for guests */
 .nav-link-register {
     background: var(--accent2); color: #000 !important; border-radius: var(--radius-sm); font-weight: 700;
 }
 .nav-link-register:hover { opacity: 0.85; color: #000 !important; }
 
+/* Pill that shows the logged-in user's email + logout button */
 .nav-user-pill {
     display: flex; align-items: center; gap: 10px;
     background: var(--surface); border-radius: 50px;
@@ -107,12 +141,14 @@ a { color: inherit; text-decoration: none; }
 }
 .nav-logout:hover { background: rgba(255,55,95,0.15); }
 
+/* Hamburger — hidden on desktop, shown on mobile */
 .nav-hamburger {
     display: none; background: none; border: 1px solid var(--border);
     color: var(--text); border-radius: 8px; padding: 5px 10px;
     cursor: pointer; font-size: 1.1rem;
 }
 
+/* Mobile dropdown menu — toggled open by the hamburger button */
 .nav-mobile-menu {
     display: none; flex-direction: column; gap: 4px;
     background: var(--bg2); border-bottom: 1px solid var(--border);
@@ -131,7 +167,9 @@ a { color: inherit; text-decoration: none; }
     .nav-hamburger { display: block; }
 }
 
-/* LAYOUT */
+/* =============================================================================
+   LAYOUT HELPERS
+   ============================================================================= */
 .page-wrap { max-width: 1080px; margin: 0 auto; padding: 36px 24px 80px; }
 
 .page-header {
@@ -141,13 +179,17 @@ a { color: inherit; text-decoration: none; }
 .page-title    { font-size: 1.9rem; font-weight: 800; letter-spacing: -1px; }
 .page-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
 
+/* Small ALL-CAPS label used as a section divider heading */
 .section-heading {
     font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px;
     text-transform: uppercase; color: var(--text-muted);
     margin: 32px 0 14px;
 }
 
-/* LANDING PAGE */
+/* =============================================================================
+   LANDING PAGE — HERO
+   Full-viewport hero section with animated background orbs for depth.
+   ============================================================================= */
 .landing-page { background: var(--bg); }
 
 .landing-hero {
@@ -158,6 +200,7 @@ a { color: inherit; text-decoration: none; }
     position: relative; overflow: hidden;
 }
 
+/* Blurred colour orbs that slowly drift — give the background life */
 .hero-bg-orbs { position: absolute; inset: 0; pointer-events: none; }
 .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 12s ease-in-out infinite; }
 .orb-1 { width: 480px; height: 480px; background: rgba(108,99,255,0.14); top: -80px; left: -120px; animation-delay: 0s; }
@@ -174,6 +217,7 @@ a { color: inherit; text-decoration: none; }
     font-size: clamp(2.8rem, 8vw, 5.5rem);
     font-weight: 800; letter-spacing: -3px; line-height: 1;
 }
+/* Gradient text spans the purple→green accent range */
 .hero-accent {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -181,8 +225,14 @@ a { color: inherit; text-decoration: none; }
 }
 .hero-subtitle { color: var(--text-muted); font-size: 1.05rem; margin-top: 14px; }
 
+/* Shared fade-in-up entry animation used on cards and tiles throughout the site */
 @keyframes fade-up { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: none; } }
 
+/* =============================================================================
+   LANDING PAGE — HERO TILES
+   The three big action tiles on the homepage (Browse, Login, Create).
+   Each has a unique tinted dark background and a coloured radial glow on hover.
+   ============================================================================= */
 .hero-tiles {
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 20px; width: 100%; max-width: 920px;
@@ -200,28 +250,32 @@ a { color: inherit; text-decoration: none; }
     animation: fade-up 0.6s ease both;
     text-decoration: none;
 }
-.hero-tile:nth-child(1) { animation-delay: 0.1s; background: linear-gradient(145deg, #191928, #141428); }
-.hero-tile:nth-child(2) { animation-delay: 0.22s; background: linear-gradient(145deg, #0e1b0e, #0e1a20); }
-.hero-tile:nth-child(3) { animation-delay: 0.34s; background: linear-gradient(145deg, #1e1900, #1e1212); }
+/* Each tile has its own subtle coloured dark gradient base */
+.hero-tile:nth-child(1) { animation-delay: 0.1s;  background: linear-gradient(145deg, #191928, #141428); } /* purple tint */
+.hero-tile:nth-child(2) { animation-delay: 0.22s; background: linear-gradient(145deg, #0e1b0e, #0e1a20); } /* green tint */
+.hero-tile:nth-child(3) { animation-delay: 0.34s; background: linear-gradient(145deg, #1e1900, #1e1212); } /* gold tint */
 .hero-tile:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 50px rgba(0,0,0,0.55);
     border-color: rgba(255,255,255,0.14);
 }
 
+/* Radial gradient overlay that fades in on hover — colour matches each tile's accent */
 .tile-float-bg {
     position: absolute; inset: 0; opacity: 0;
     transition: opacity 0.4s; border-radius: 18px; pointer-events: none;
 }
 .tile-browse  .tile-float-bg { background: radial-gradient(circle at 80% 20%, rgba(108,99,255,0.22), transparent 65%); }
-.tile-account .tile-float-bg { background: radial-gradient(circle at 80% 20%, rgba(48,209,88,0.2), transparent 65%); }
-.tile-create  .tile-float-bg { background: radial-gradient(circle at 80% 20%, rgba(255,214,10,0.18), transparent 65%); }
+.tile-account .tile-float-bg { background: radial-gradient(circle at 80% 20%, rgba(48,209,88,0.2),   transparent 65%); }
+.tile-create  .tile-float-bg { background: radial-gradient(circle at 80% 20%, rgba(255,214,10,0.18),  transparent 65%); }
 .hero-tile:hover .tile-float-bg { opacity: 1; }
 
 .tile-icon  { font-size: 2.2rem; }
 .tile-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px; }
 .tile-desc  { color: var(--text-muted); font-size: 0.88rem; flex: 1; line-height: 1.6; }
 .tile-cta   { font-weight: 700; color: var(--accent); font-size: 0.88rem; margin-top: 8px; }
+
+/* Logged-in variant of the account tile — shows a red logout button */
 .tile-loggedin .tile-cta-btn {
     display: inline-block; margin-top: 10px; padding: 8px 18px;
     background: var(--danger); color: white; border-radius: 8px;
@@ -229,7 +283,11 @@ a { color: inherit; text-decoration: none; }
 }
 .tile-loggedin .tile-cta-btn:hover { opacity: 0.85; }
 
-/* POLL LIST */
+/* =============================================================================
+   POLL LIST PAGE
+   ============================================================================= */
+
+/* Code search bar at the top of the poll list */
 .poll-search-bar { margin-bottom: 28px; }
 .poll-search-bar form { display: flex; gap: 10px; max-width: 440px; }
 .poll-search-bar input {
@@ -240,25 +298,51 @@ a { color: inherit; text-decoration: none; }
 }
 .poll-search-bar input:focus { outline: none; border-color: var(--accent); }
 
+/* Responsive grid that auto-fills as many 300px columns as will fit */
 .poll-tile-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 18px;
 }
 
+/* =============================================================================
+   POLL TILES (Poll List page)
+   Glassy dark cards — semi-transparent background + blur gives the glass feel.
+   A faint purple radial glow fades in on hover for a premium touch.
+   ============================================================================= */
 .poll-tile {
-    background: var(--surface); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    /* Layered gradient creates depth; slight transparency lets bg bleed through */
+    background: linear-gradient(145deg, rgba(30,30,46,0.85), rgba(20,20,35,0.9));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.07);
     border-radius: 16px; padding: 22px;
     cursor: pointer; display: flex; flex-direction: column; gap: 10px;
     transition: transform var(--t), box-shadow var(--t), border-color var(--t);
     animation: fade-up 0.45s ease both;
+    /* Outer shadow for elevation + inner top-edge highlight to simulate glass rim */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
 }
-.poll-tile:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(108,99,255,0.5); }
-.poll-tile.tile-ended { opacity: 0.7; }
-.poll-tile.tile-ended:hover { border-color: rgba(255,255,255,0.12); }
+/* Purple radial glow in top-left corner — fades in on hover */
+.poll-tile::before {
+    content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none;
+    background: radial-gradient(circle at 15% 15%, rgba(108,99,255,0.1), transparent 60%);
+    opacity: 0; transition: opacity 0.35s;
+}
+.poll-tile:hover {
+    transform: translateY(-5px);
+    border-color: rgba(108,99,255,0.4);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
+}
+.poll-tile:hover::before { opacity: 1; }
+/* Ended polls are dimmed so active ones stand out */
+.poll-tile.tile-ended { opacity: 0.65; }
+.poll-tile.tile-ended:hover { border-color: rgba(255,255,255,0.1); }
 
+/* Inner layout pieces of each poll tile */
 .ptile-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 .ptile-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; flex: 1; }
 
+/* Live countdown timer badge — green pill, switches to grey when ended */
 .ptile-timer {
     font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700;
     color: var(--accent2); white-space: nowrap;
@@ -267,6 +351,7 @@ a { color: inherit; text-decoration: none; }
 }
 .ptile-timer.timer-ended { color: var(--text-muted); background: var(--bg3); }
 
+/* Live / Ended status badge */
 .ptile-badge {
     font-size: 0.7rem; font-weight: 700; padding: 3px 10px;
     border-radius: 20px; letter-spacing: 0.5px; width: fit-content;
@@ -276,6 +361,7 @@ a { color: inherit; text-decoration: none; }
 
 .ptile-question { color: var(--text-muted); font-size: 0.88rem; flex: 1; line-height: 1.5; }
 
+/* Bottom strip with the poll code and copy/share buttons */
 .ptile-bottom { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
 .ptile-code-wrap { display: flex; align-items: center; gap: 7px; }
 .ptile-code-label { font-size: 0.72rem; color: var(--text-muted); }
@@ -289,15 +375,40 @@ a { color: inherit; text-decoration: none; }
     transition: all var(--t);
 }
 .ptile-copy-btn:hover, .ptile-share-btn:hover { background: var(--surface2); color: var(--text); }
+/* Green flash when clipboard copy succeeds */
 .ptile-copy-btn.copied, .ptile-share-btn.copied { color: var(--accent2); border-color: var(--accent2); }
 
+/* Shown when there are zero polls to display */
 .empty-state { text-align: center; padding: 72px 20px; }
 .empty-icon { font-size: 2.8rem; margin-bottom: 14px; }
 .empty-state p { color: var(--text-muted); }
 .empty-state a { color: var(--accent); font-weight: 700; }
 
-/* AUTH PAGES */
-.auth-page { }
+/* =============================================================================
+   LOADING STATE
+   Spinner + text shown while Firestore data is being fetched.
+   Used on poll_list, dashboard, and view_poll pages.
+   ============================================================================= */
+.loading-state {
+    display: flex; flex-direction: column;
+    align-items: center; padding: 60px 20px;
+    color: var(--text-muted); font-size: 0.95rem; gap: 14px;
+}
+
+/* CSS-only spinning ring — uses the accent purple as the leading colour */
+.loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid rgba(255,255,255,0.08); /* faint full ring */
+    border-top-color: var(--accent);           /* bright leading edge */
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* =============================================================================
+   AUTH PAGES (Login / Register)
+   ============================================================================= */
+/* .auth-page { } -unused */
 .auth-wrap {
     display: flex; justify-content: center; align-items: center;
     min-height: calc(100vh - 60px); padding: 40px 20px;
@@ -310,11 +421,14 @@ a { color: inherit; text-decoration: none; }
 .auth-title    { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 5px; }
 .auth-subtitle { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px; }
 .auth-form { display: flex; flex-direction: column; gap: 14px; }
+
+/* Inline error banner — red tint */
 .auth-error {
     background: rgba(255,55,95,0.1); border: 1px solid rgba(255,55,95,0.3);
     color: var(--danger); padding: 9px 13px; border-radius: var(--radius-sm);
     font-size: 0.85rem; margin-bottom: 10px;
 }
+/* Inline success banner — green tint */
 .auth-success {
     background: rgba(48,209,88,0.1); border: 1px solid rgba(48,209,88,0.3);
     color: var(--accent2); padding: 9px 13px; border-radius: var(--radius-sm);
@@ -324,7 +438,10 @@ a { color: inherit; text-decoration: none; }
 .auth-footer a { color: var(--text-muted); font-size: 0.83rem; transition: color var(--t); }
 .auth-footer a:hover { color: var(--accent); }
 
-/* FORMS & INPUTS */
+/* =============================================================================
+   FORMS & INPUTS
+   Shared styles for every text input, textarea, and select on the site.
+   ============================================================================= */
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 label { font-size: 0.83rem; font-weight: 600; color: var(--text-muted); }
 
@@ -336,12 +453,14 @@ input[type=number], textarea, select {
     font-family: var(--font-main); font-size: 0.93rem;
     transition: border-color var(--t), box-shadow var(--t);
 }
+/* Focus ring — purple glow matching the accent */
 input:focus, textarea:focus {
     outline: none; border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(108,99,255,0.14);
 }
 textarea { resize: vertical; min-height: 78px; }
 
+/* Named utility variants used on the create-poll form */
 .form-label    { font-size: 0.83rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; display: block; }
 .form-input    { width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 11px 13px; font-family: var(--font-main); font-size: 0.93rem; transition: border-color var(--t); }
 .form-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,0.14); }
@@ -350,7 +469,7 @@ textarea { resize: vertical; min-height: 78px; }
 .form-row      { display: flex; gap: 18px; flex-wrap: wrap; }
 .form-group-half { flex: 1; min-width: 160px; }
 
-/* Toggle */
+/* Toggle switch — used for "Show results to voters" on create-poll */
 .show-results-label { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted); }
 .toggle-wrap  { position: relative; width: 46px; height: 25px; flex-shrink: 0; }
 .toggle-input { opacity: 0; width: 0; height: 0; position: absolute; }
@@ -359,7 +478,9 @@ textarea { resize: vertical; min-height: 78px; }
 .toggle-input:checked + .toggle-slider { background: var(--accent); }
 .toggle-input:checked + .toggle-slider::after { transform: translateX(21px); }
 
-/* BUTTONS */
+/* =============================================================================
+   BUTTONS
+   ============================================================================= */
 .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     padding: 10px 20px; border-radius: var(--radius-sm);
@@ -367,27 +488,32 @@ textarea { resize: vertical; min-height: 78px; }
     font-family: var(--font-main); font-weight: 700; font-size: 0.88rem;
     transition: all var(--t); text-decoration: none; line-height: 1; white-space: nowrap;
 }
-.btn-primary   { background: var(--accent); color: white; }
+.btn-primary   { background: var(--accent);   color: white; }
 .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-danger    { background: var(--danger); color: white; }
-.btn-warning   { background: var(--warning); color: #000; }
-.btn-success   { background: var(--accent2); color: #000; }
+.btn-danger    { background: var(--danger);   color: white; }
+.btn-warning   { background: var(--warning);  color: #000; }
+.btn-success   { background: var(--accent2);  color: #000; }
 .btn:hover     { opacity: 0.85; transform: translateY(-1px); }
 .btn:active    { transform: none; opacity: 1; }
 .btn-full      { width: 100%; }
 .btn-sm        { padding: 6px 13px; font-size: 0.8rem; }
 
-/* CREATE POLL */
+/* =============================================================================
+   CREATE POLL PAGE
+   ============================================================================= */
 .create-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 18px; padding: 32px; max-width: 660px; margin: 0 auto;
 }
+
+/* Step 1 — "Add descriptions?" prompt screen */
 .desc-ask-screen { text-align: center; padding: 16px 0 8px; }
 .desc-ask-icon   { font-size: 2.8rem; margin-bottom: 14px; }
 .desc-ask-screen h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
 .desc-ask-screen p  { color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem; }
 .desc-ask-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
+/* Options list — +/- controls to add or remove option fields */
 .options-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .options-controls { display: flex; gap: 6px; }
 .opt-ctrl-btn {
@@ -399,6 +525,7 @@ textarea { resize: vertical; min-height: 78px; }
 }
 .opt-ctrl-btn:hover { background: var(--accent); border-color: var(--accent); }
 
+/* Individual option block — darker card containing the input (and optional textarea) */
 .option-block {
     margin-bottom: 10px; background: var(--bg2);
     border-radius: 9px; padding: 11px; border: 1px solid var(--border);
@@ -407,18 +534,25 @@ textarea { resize: vertical; min-height: 78px; }
 .option-num   { font-weight: 800; color: var(--text-muted); min-width: 18px; font-size: 0.9rem; }
 .desc-row     { margin-top: 7px; }
 .desc-textarea { min-height: 64px; font-size: 0.86rem !important; }
-.word-counter { text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
-.word-counter.over-limit { color: var(--gold); }
 
-/* VIEW POLL */
+/* Word counter shown below description textareas */
+.word-counter { text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+.word-counter.over-limit { color: var(--gold); } /* turns gold when approaching 250 words */
+
+/* =============================================================================
+   VIEW POLL PAGE
+   ============================================================================= */
 .view-poll-header { margin-bottom: 28px; }
 .vp-timer-wrap    { margin-bottom: 10px; }
+
+/* Countdown badge at the top of the poll — same green/grey states as ptile-timer */
 .vp-timer {
     font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700;
     color: var(--accent2); background: rgba(48,209,88,0.1);
     padding: 4px 13px; border-radius: 20px; display: inline-block;
 }
 .vp-timer.timer-ended { color: var(--text-muted); background: var(--bg3); }
+
 .vp-title    { font-size: 1.9rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 7px; }
 .vp-question { color: var(--text-muted); font-size: 1rem; margin-bottom: 12px; line-height: 1.5; }
 .vp-meta     { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -429,24 +563,22 @@ textarea { resize: vertical; min-height: 78px; }
 
 .vote-instruction { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px; }
 
-/* Vote tiles */
+/* Grid of clickable option tiles (no-description mode) */
 .vote-tile-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 13px; margin-bottom: 20px;
 }
 .vote-tile {
-    position: relative;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
+    position: relative; background: var(--surface); border: 2px solid var(--border);
     border-radius: 13px; padding: 18px 14px 14px;
     cursor: pointer; display: flex; flex-direction: column; gap: 8px;
     transition: all var(--t); min-height: 80px;
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 16px rgba(0,0,0,0.25);
 }
-.vote-tile:hover { border-color: rgba(108,99,255,0.4); background: rgba(108,99,255,0.07); transform: translateY(-3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.3); }
-.vote-tile.selected { border-color: var(--accent); background: rgba(108,99,255,0.13); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(108,99,255,0.35), 0 4px 16px rgba(108,99,255,0.15); }
+.vote-tile:hover    { border-color: var(--accent); background: var(--surface2); transform: translateY(-2px); }
+.vote-tile.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); }
 .vote-tile-text { font-weight: 700; font-size: 0.92rem; }
+
+/* Small info button on tiles that have a description */
 .desc-peek-btn {
     position: absolute; top: 9px; right: 9px;
     background: var(--bg3); border: 1px solid var(--border); color: var(--text-muted);
@@ -456,23 +588,22 @@ textarea { resize: vertical; min-height: 78px; }
 }
 .desc-peek-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-/* Vote list */
+/* List of clickable options (with-description mode) */
 .vote-options-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
 .vote-option {
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; padding: 14px 18px; cursor: pointer;
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: 11px; padding: 14px 18px; cursor: pointer;
     transition: all var(--t); font-weight: 600; font-size: 0.93rem;
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 8px rgba(0,0,0,0.2);
 }
-.vote-option:hover    { border-color: rgba(108,99,255,0.4); background: rgba(108,99,255,0.07); transform: translateX(3px); }
-.vote-option.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(108,99,255,0.3); }
-.vote-option.disqualified { background: var(--bg3); color: var(--text-muted); cursor: not-allowed; font-style: italic; opacity: 0.5; }
+.vote-option:hover    { border-color: var(--accent); background: var(--surface2); }
+.vote-option.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); }
+/* Disqualified options are greyed out and non-interactive */
+.vote-option.disqualified { background: var(--bg3); color: var(--text-muted); cursor: not-allowed; font-style: italic; opacity: 0.7; }
 .disq-label { font-size: 0.72rem; color: var(--danger); font-style: normal; font-weight: 700; }
 .vote-submit-btn { margin-top: 6px; }
 
+/* Notice box — shown when the user has already voted or poll has ended */
 .vp-notice {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 13px; padding: 22px; margin-bottom: 22px;
@@ -481,7 +612,9 @@ textarea { resize: vertical; min-height: 78px; }
 .ended-msg { font-weight: 700; color: var(--text-muted); }
 .my-vote-highlight { color: var(--accent2); font-weight: 700; }
 
-/* Results */
+/* =============================================================================
+   RESULTS SECTION (View Poll)
+   ============================================================================= */
 .results-section { margin-top: 22px; }
 .results-title   { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
 .result-row { margin-bottom: 14px; animation: fade-up 0.4s ease both; }
@@ -491,56 +624,29 @@ textarea { resize: vertical; min-height: 78px; }
 }
 .result-rank  { font-size: 1.1rem; width: 26px; flex-shrink: 0; }
 .result-votes { margin-left: auto; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.78rem; }
-.result-bar-row { display: flex; align-items: center; gap: 8px; }
 .disqualified-row { opacity: 0.55; }
 
-/* Loading state */
-.loading-state {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 16px; padding: 80px 20px;
-    color: var(--text-muted); font-size: 0.92rem;
-}
-.loading-spinner {
-    width: 36px; height: 36px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.75s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Progress bars — slim, glassy */
-.progress {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 50px; height: 8px; overflow: hidden;
-}
+/* Progress bar backing track + animated fill */
+.progress { background: var(--bg3); border-radius: 50px; height: 26px; overflow: hidden; }
 .progress-bar {
-    height: 100%; border-radius: 50px;
-    transition: width 0.9s cubic-bezier(0.4,0,0.2,1);
-    background: rgba(108,99,255,0.5); /* uniform muted accent for all — live or no winner yet */
+    height: 100%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; border-radius: 50px;
+    /* Width animates in when results load — gives a satisfying reveal */
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1); min-width: 36px;
 }
-/* Winner bar only: vivid gold shimmer, only applied when .winner-bar class is added by JS */
-.progress-bar.winner-bar {
-    background: linear-gradient(90deg, #ffd60a, #ffb700, #ffd60a);
-    background-size: 200% 100%;
-    animation: shimmer 2s linear infinite;
-    box-shadow: 0 0 10px rgba(255,214,10,0.5);
-}
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.bg-gold { background: rgba(108,99,255,0.5); } /* same as default until winner-bar overrides */
-.bg-blue { background: rgba(108,99,255,0.5); }
-.bg-teal { background: rgba(108,99,255,0.5); }
-.bg-dark { background: rgba(255,255,255,0.05); }
+/* Colour variants for result bars — assigned by rank */
+.bg-gold { background: var(--gold);    color: #000; }
+.bg-blue { background: var(--blue);    color: #fff; }
+.bg-teal { background: var(--accent2); color: #000; }
+.bg-dark { background: var(--surface2); color: var(--text-muted); }
 
-/* Percentage label — shown next to bar, not inside it */
-.result-pct { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-left: 4px; flex-shrink: 0; }
-/* "your pick" label */
-.your-pick-label { font-style: italic; font-size: 0.75rem; color: var(--accent); margin-left: 6px; }
-
-/* Description modal */
+/* =============================================================================
+   DESCRIPTION MODAL
+   Slide-up modal that shows an option's full description text.
+   ============================================================================= */
 .modal-overlay {
     position: fixed; inset: 0; z-index: 200;
+    /* Dark scrim with blur so modal feels elevated above the page */
     background: rgba(0,0,0,0.72); backdrop-filter: blur(5px);
     display: flex; align-items: center; justify-content: center;
     padding: 28px; opacity: 0; pointer-events: none;
@@ -551,6 +657,7 @@ textarea { resize: vertical; min-height: 78px; }
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 18px; padding: 28px; max-width: 400px; width: 100%;
     position: relative; box-shadow: var(--shadow);
+    /* Starts slightly scaled down and offset — animates to natural position */
     transform: translateY(24px) scale(0.97); transition: transform 0.25s ease;
 }
 .modal-overlay.open .desc-modal { transform: none; }
@@ -563,9 +670,11 @@ textarea { resize: vertical; min-height: 78px; }
 .modal-close-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
 .modal-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 10px; padding-right: 30px; }
 .modal-desc  { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
-body.modal-open { overflow: hidden; }
+body.modal-open { overflow: hidden; } /* prevents page scroll while modal is open */
 
-/* Vote submitted */
+/* =============================================================================
+   VOTE SUBMITTED PAGE
+   ============================================================================= */
 .submitted-card {
     max-width: 420px; margin: 70px auto; text-align: center;
     background: var(--surface); border: 1px solid var(--border);
@@ -576,28 +685,56 @@ body.modal-open { overflow: hidden; }
 .submitted-msg   { color: var(--text-muted); margin-bottom: 24px; }
 .submitted-card .btn { margin: 5px; }
 
-/* ADMIN DASHBOARD */
+/* =============================================================================
+   ADMIN DASHBOARD
+   Responsive grid of poll cards, each with manage/view action buttons.
+   ============================================================================= */
 .dash-poll-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
 }
+
+/* =============================================================================
+   DASHBOARD TILES
+   Same glassy treatment as poll-tiles — slightly smaller padding to fit more
+   metadata (creator email, action buttons) without feeling cramped.
+   ============================================================================= */
 .dash-tile {
-    background: var(--surface); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    background: linear-gradient(145deg, rgba(30,30,46,0.85), rgba(20,20,35,0.9));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.07);
     border-radius: 15px; padding: 20px;
     display: flex; flex-direction: column; gap: 9px;
     transition: all var(--t); animation: fade-up 0.45s ease both;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
 }
-.dash-tile:hover { border-color: rgba(108,99,255,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+/* Same purple radial glow as poll-tiles for visual consistency */
+.dash-tile::before {
+    content: ""; position: absolute; inset: 0; border-radius: 15px; pointer-events: none;
+    background: radial-gradient(circle at 15% 15%, rgba(108,99,255,0.1), transparent 60%);
+    opacity: 0; transition: opacity 0.35s;
+}
+.dash-tile:hover {
+    border-color: rgba(108,99,255,0.4);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
+    transform: translateY(-3px);
+}
+.dash-tile:hover::before { opacity: 1; }
 .dash-tile-ended { opacity: 0.65; }
-.dash-tile-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+
+.dash-tile-top   { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .dash-tile-title { font-size: 0.97rem; font-weight: 800; }
-.dash-badge { font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-.dash-tile-q    { color: var(--text-muted); font-size: 0.83rem; flex: 1; line-height: 1.5; }
-.dash-tile-meta { font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono); }
-.dash-creator   { color: var(--text-muted); font-size: 0.74rem; }
+/* Live / Ended mini badge — reuses same colour rules as ptile-badge */
+.dash-badge      { font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.dash-tile-q     { color: var(--text-muted); font-size: 0.83rem; flex: 1; line-height: 1.5; }
+.dash-tile-meta  { font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono); }
+.dash-creator    { color: var(--text-muted); font-size: 0.74rem; } /* email shown only to master admin */
 .dash-tile-actions { display: flex; gap: 7px; margin-top: 4px; }
 
-/* MANAGE POLL */
+/* =============================================================================
+   MANAGE POLL PAGE
+   ============================================================================= */
 .manage-header-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 16px; padding: 26px; margin-bottom: 28px;
@@ -610,6 +747,8 @@ body.modal-open { overflow: hidden; }
 .manage-question { color: var(--text-muted); margin-bottom: 7px; font-size: 0.92rem; }
 .manage-code     { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
 .manage-actions  { display: flex; gap: 9px; flex-wrap: wrap; flex-shrink: 0; }
+
+/* Stat pills showing total votes, options count, etc. */
 .manage-stats    { display: flex; gap: 10px; flex-wrap: wrap; }
 .stat-pill {
     background: var(--bg3); border: 1px solid var(--border);
@@ -617,6 +756,7 @@ body.modal-open { overflow: hidden; }
 }
 .stat-pill strong { color: var(--text); }
 
+/* Grid of option cards with vote bars and disqualify buttons */
 .manage-options-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 14px; margin-bottom: 28px;
@@ -627,7 +767,8 @@ body.modal-open { overflow: hidden; }
     display: flex; flex-direction: column; gap: 9px;
     animation: fade-up 0.4s ease both;
 }
-.disq-tile { opacity: 0.5; border-color: rgba(255,55,95,0.2); }
+/* Disqualified option tiles are faded with a red border tint */
+.disq-tile  { opacity: 0.5; border-color: rgba(255,55,95,0.2); }
 .mot-header { display: flex; align-items: center; gap: 8px; }
 .mot-rank   { font-size: 1.1rem; width: 26px; flex-shrink: 0; }
 .mot-name   { font-weight: 700; flex: 1; font-size: 0.92rem; }
@@ -635,6 +776,7 @@ body.modal-open { overflow: hidden; }
 .disq-reason { font-size: 0.8rem; color: var(--text-muted); }
 .disq-btn   { align-self: flex-start; margin-top: 2px; }
 
+/* Voters list table at the bottom of manage poll */
 .voters-list {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 13px; overflow: hidden; margin-bottom: 40px;
@@ -648,9 +790,12 @@ body.modal-open { overflow: hidden; }
 .voter-time  { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
 .no-voters   { padding: 22px; text-align: center; color: var(--text-muted); }
 
-/* DISQUALIFY PAGE */
+/* =============================================================================
+   DISQUALIFY OPTION PAGE
+   ============================================================================= */
 .disq-page-card {
     max-width: 500px; margin: 56px auto;
+    /* Red border tint signals a destructive/warning action */
     background: var(--surface); border: 1px solid rgba(255,55,95,0.2);
     border-radius: 18px; padding: 32px;
 }
@@ -664,63 +809,51 @@ body.modal-open { overflow: hidden; }
 .disq-form      { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
 .disq-form-btns { display: flex; gap: 10px; margin-top: 4px; }
 
-/* JS FORM VALIDATION */
+/* =============================================================================
+   FORM VALIDATION
+   Visual feedback for invalid fields — red border + glow + error message.
+   ============================================================================= */
 .field-error {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--danger);
-    margin-top: 4px;
-    min-height: 16px;
-    transition: all 0.2s ease;
+    display: block; font-size: 0.78rem; color: var(--danger);
+    margin-top: 4px; min-height: 16px; transition: all 0.2s ease;
 }
 .input-invalid {
     border-color: var(--danger) !important;
     box-shadow: 0 0 0 3px rgba(255,55,95,0.15) !important;
 }
-.input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-.input-wrap input {
-    flex: 1;
-    padding-right: 56px;
-}
+
+/* Wrapper used on password fields to position the show/hide toggle inside */
+.input-wrap { position: relative; display: flex; align-items: center; }
+.input-wrap input { flex: 1; padding-right: 56px; }
 .toggle-pw {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.78rem;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 4px;
-    transition: color 0.2s ease;
-    font-family: var(--font-main);
+    position: absolute; right: 10px;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    padding: 4px 6px; border-radius: 4px;
+    transition: color 0.2s ease; font-family: var(--font-main);
 }
 .toggle-pw:hover { color: var(--accent); }
 
-/* WINNER HIGHLIGHT */
-.result-winner {
-    position: relative;
-}
+/* =============================================================================
+   WINNER HIGHLIGHT
+   Applied to the 1st-place result row and manage-poll tile.
+   Pulsing trophy emoji + gold text + warm glow.
+   ============================================================================= */
+.result-winner { position: relative; }
 .result-winner .result-rank {
     font-size: 2rem;
     filter: drop-shadow(0 0 8px rgba(255,214,10,0.7));
     animation: trophy-pulse 2s ease-in-out infinite;
 }
 .result-winner .result-label > span:nth-child(2) {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--gold);
+    font-size: 1.1rem; font-weight: 800; color: var(--gold);
 }
 @keyframes trophy-pulse {
     0%, 100% { transform: scale(1); }
     50%       { transform: scale(1.15); }
 }
 
+/* Gold border + glow on the winning option tile in manage-poll */
 .winner-tile {
     border-color: rgba(255,214,10,0.5) !important;
     box-shadow: 0 0 20px rgba(255,214,10,0.15);
@@ -730,8 +863,4 @@ body.modal-open { overflow: hidden; }
     filter: drop-shadow(0 0 8px rgba(255,214,10,0.7));
     animation: trophy-pulse 2s ease-in-out infinite;
 }
-.winner-tile .mot-name {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--gold);
-}
+.winner-tile .mot-name { font-size: 1.05rem; font-weight: 800; color: var(--gold); }
