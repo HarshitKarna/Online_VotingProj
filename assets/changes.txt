@@ -1,0 +1,8 @@
+Changed API restrictions.
+-changed what user can edit and view what in the database.
+
+Only allows 4 apis: 
+-Cloud Firestore API
+-Firebase Installations API
+-Identity Toolkit API (this is Firebase Auth)
+-Token Service API
